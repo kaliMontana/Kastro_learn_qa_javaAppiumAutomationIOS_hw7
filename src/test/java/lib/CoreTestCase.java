@@ -10,6 +10,10 @@ import java.net.URL;
 import java.time.Duration;
 
 public class CoreTestCase extends TestCase {
+
+	private static final String PLATFORM_IOS = "ios";
+	private static final String PLATFORM_ANDROID = "android";
+
 	protected AppiumDriver driver;
 	private static String AppiumUrl = "http://localhost:4723/wd/hub";
 
@@ -18,16 +22,7 @@ public class CoreTestCase extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-
-		capabilities.setCapability("platformName", "Android");
-		capabilities.setCapability("deviceName", "and80");
-		capabilities.setCapability("platformVersion", "8.0");
-		capabilities.setCapability("automationName", "Appium");
-		capabilities.setCapability("appPackage", "org.wikipedia");
-		capabilities.setCapability("appActivity", "org.wikipedia.main.MainActivity");
-		capabilities.setCapability("app", "D:\\learn_qa\\Kastro_learn_qa_javaAppiumAutomation_hw2\\apks\\org.wikipedia.apk");
-
+		DesiredCapabilities capabilities = this.getCapabilitiesByPlatformEnv();
 		driver = new AndroidDriver(new URL(AppiumUrl), capabilities);
 		this.rotateScreenPortrait();
 	}
@@ -49,5 +44,29 @@ public class CoreTestCase extends TestCase {
 
 	protected void backGroundApp(int seconds) {
 		driver.runAppInBackground(Duration.ofSeconds(seconds));
+	}
+
+	private DesiredCapabilities getCapabilitiesByPlatformEnv() throws Exception {
+		String platform = System.getenv("PLATFORM");
+		DesiredCapabilities capabilities = new DesiredCapabilities();
+
+		if (platform.equals(PLATFORM_ANDROID)) {
+			capabilities.setCapability("platformName", "Android");
+			capabilities.setCapability("deviceName", "and80");
+			capabilities.setCapability("platformVersion", "8.0");
+			capabilities.setCapability("automationName", "Appium");
+			capabilities.setCapability("appPackage", "org.wikipedia");
+			capabilities.setCapability("appActivity", "org.wikipedia.main.MainActivity");
+			capabilities.setCapability("app", "D:\\learn_qa\\Kastro_learn_qa_javaAppiumAutomation_hw2\\apks\\org.wikipedia.apk");
+		} else if (platform.equals(PLATFORM_IOS)) {
+			capabilities.setCapability("platformName", "iOS");
+			capabilities.setCapability("deviceName", "iPhone SE");
+			capabilities.setCapability("platformVersion", "11.3");
+			capabilities.setCapability("app", "D:\\learn_qa\\Kastro_learn_qa_javaAppiumAutomation_hw2\\apks\\org.wikipedia.app");
+		} else {
+			throw new Exception("Cannot get run platform from env variable. Platform value " + platform);
+		}
+
+		return capabilities;
 	}
 }

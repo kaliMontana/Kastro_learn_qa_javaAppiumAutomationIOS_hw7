@@ -139,4 +139,8 @@ abstract public class ArticlePageObject extends MainPageObject {
 				15
 		);
 	}
+
+	public void addArticleToMySaved() {
+		this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find to add article to reading list", 5);
+	}
 }

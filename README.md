@@ -1,5 +1,5 @@
 # Kastro_learn_qa_javaAppiumAutomationIOS_hw7
-After start test is necessary command in terminal:
+Before start test is necessary in Windows terminal to set the platform name:
 set PLATFORM=android
 
 To start a test:
